@@ -13,5 +13,6 @@ UCLASS()
 class HEROES_API AHeroesGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+		AHeroesGameModeBase();
 };
