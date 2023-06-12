@@ -12,6 +12,8 @@ public class Heroes : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+		//PublicIncludePath.AddRange(new string[] { "Heroes/Core/Grid" });
+
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		

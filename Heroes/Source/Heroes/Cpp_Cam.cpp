@@ -21,6 +21,7 @@ ACpp_Cam::ACpp_Cam()
 	SpringArm->TargetArmLength = 3500.0f;
 	SpringArm->SetWorldRotation(FRotator(-60.0f, 0.0f, 0.0f)); // Y Z X
 	SpringArm->SetupAttachment(DefaultSceneRoot);
+	SpringArm->bDoCollisionTest = false; // Отключаем столкновение
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
@@ -52,9 +53,9 @@ void ACpp_Cam::CameraMove(const FInputActionValue& Value)
 	//Есть баг: при перемещении камеры над объектом она смещается к нему. В реализации BluePrint не встречается. Возможно из-за 2д вектора
 	// Мы отмечаем, что ввод нажат
 	FollowTime += GetWorld()->GetDeltaSeconds();
-	const FVector2D CValue = Value.Get<FVector2D>();
-	const FVector ForwardVector = CValue.GetSafeNormal().Component(0) * LocationSpeed * GetActorForwardVector();
-	const FVector RightVector = CValue.GetSafeNormal().Component(1) * LocationSpeed * GetActorRightVector();
+	const FVector2D CValue = Value.Get<FVector2D>().GetSafeNormal();
+	const FVector ForwardVector = CValue.Component(0) * LocationSpeed * GetActorForwardVector();
+	const FVector RightVector = CValue.Component(1) * LocationSpeed * GetActorRightVector();
 	LocationDesired = ForwardVector + LocationDesired + RightVector;
 	SetActorLocation(FMath::VInterpTo(GetActorLocation(), LocationDesired, FollowTime, LocationInterp));
 	//UE_LOG(LogTemp, Warning, TEXT("Value: %s"), *CValue.ToString());
