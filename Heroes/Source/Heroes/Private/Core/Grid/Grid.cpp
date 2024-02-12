@@ -54,8 +54,8 @@ FVector AGrid::CalculateBottom()
 {
 	FVector V = GridTileSize * FVector(1.5f, 1.0f, 1.0f);
 	FVector Center = SnapVectorToVector(GridCenterLocation, V);
-	FVector V2 = (GridTileCount / FIntVector(3, 2, 1)) * GridTileSize;
+	//FVector V2 = (GridTileCount / FIntVector(3, 2, 1)) * GridTileSize;
 
-	return Center - SnapVectorToVector(V2, V);
+	return V; //Center - SnapVectorToVector(V2, V);
 }
 
