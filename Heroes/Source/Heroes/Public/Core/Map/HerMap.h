@@ -32,49 +32,35 @@ public:
 	// Коммпонент процедурной сетки ландшафта
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Default")
 		TObjectPtr<UProceduralMeshComponent> TerrainMesh;
-	// Количество вершин по координате x
+	// Количество вершин по одной гране меша
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
-		int X_VertexCount;
-	// Количество вершин по координате y
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
-		int Y_VertexCount;
+		int Resolution = 10;
 	// Размер одной секции ландшафта
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
-		double CellSize;
-	// Количество вершин в сетке ландшафта
-	UPROPERTY(BlueprintReadWrite, Category = "Default")
-		TArray<FVector> Vertices;
-	// Количество треугольников в сетке ландшафта
-	UPROPERTY(BlueprintReadWrite, Category = "Default")
-		TArray<int> Triangles;
-	// Нормали
-	UPROPERTY(BlueprintReadWrite, Category = "Default")
-		TArray<FVector> Normals;
-	// UV карта
-	UPROPERTY(BlueprintReadWrite, Category = "Default")
-		TArray<FVector2D> UV0;
+		double CellSize = 1000.0;
 	/* Цветовые вершины
 	UPROPERTY(BlueprintReadWrite, Category = "Default")
 		TArray<FLinearColor> VertexColors;*/
 	// 
 	UPROPERTY(BlueprintReadWrite, Category = "Default")
 		TArray<FProcMeshTangent> Tangents;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+		int UV_Scale = 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerlinNoise")
 		float Frequency = 1.0f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerlinNoise")
 		float Amplitude = 1.0f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerlinNoise")
-		/*uint8*/int Octave = 1;
+		/*uint8*/int Octave = 12;
 	
 
 	UFUNCTION(BlueprintCallable)
 		/// <summary>
 		/// Создает ландшафт
 		/// </summary>
-		/// <param name="X_Veretex"></param> Количество вершин по координате X
-		/// <param name="Y_Vertex"></param> Количество вершин по координате Y
+		/// <param name="Res"></param> Количество вершин по одной гране меша
 		/// <param name="Size"></param> Размер всей секции
-		void GenerateTerrain(int X_Veretex = 10, int Y_Vertex = 10, double Size = 1000);
+		void GenerateTerrain(int Res, double Size);
 
 	UFUNCTION(BlueprintCallable)
 		// Уничтожает ландшафт
@@ -87,4 +73,16 @@ public:
 	//UFUNCTION(BlueprintCallable)
 		// Рассчет нормалей вершин
 		void Normal();
+	// Простой шум Перлина в координатах x, y
+	float PerlinNoise(float x, float y);
+
+private:
+	// Вычисление скалярного произведения 
+	// векторов расстояния и случайного
+	// градиента в указанной точке.
+	float DotGridGradient(int ix, int iy, float x, float y);
+
+	FVector2D RandomGradient(int x, int y);
+
+	inline float CubicInterpolate(float a0, float a1, float w);
 };
